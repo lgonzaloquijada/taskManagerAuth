@@ -15,6 +15,7 @@ import { AuthService } from '@services/auth.service';
 export class NavbarComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  user$ = this.authService.user$;
 
   faBell = faBell;
   faInfoCircle = faInfoCircle;
