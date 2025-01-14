@@ -23,12 +23,42 @@ export class TokenService {
     removeCookie('token');
   }
 
+  saveRefreshToken(refreshToken: string): void {
+    //localStorage.setItem('refreshToken', refreshToken);
+    setCookie('refreshToken', refreshToken, { expires: 1, path: '/' });
+  }
+
+  getRefreshToken() {
+    //return localStorage.getItem('refreshToken') || '';
+    return getCookie('refreshToken');
+  }
+
+  removeRefreshToken(): void {
+    //localStorage.removeItem('refreshToken');
+    removeCookie('refreshToken');
+  }
+
   isValidToken(): boolean {
     const token = this.getToken();
     if (!token) {
       return false;
     }
     const decodedToken = jwtDecode<JwtPayload>(token);
+    if (decodedToken && decodedToken?.exp) {
+      const tokenDate = new Date(0);
+      tokenDate.setUTCSeconds(decodedToken.exp);
+      const today = new Date();
+      return tokenDate.getTime() > today.getTime();
+    }
+    return false;
+  }
+
+  isValidRefreshToken(): boolean {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      return false;
+    }
+    const decodedToken = jwtDecode<JwtPayload>(refreshToken);
     if (decodedToken && decodedToken?.exp) {
       const tokenDate = new Date(0);
       tokenDate.setUTCSeconds(decodedToken.exp);

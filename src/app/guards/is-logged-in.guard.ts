@@ -10,7 +10,7 @@ export class IsLoggedInGuard implements CanActivate {
   private router = inject(Router);
 
   canActivate() {
-    const isValidToken = this.tokenService.isValidToken();
+    const isValidToken = this.tokenService.isValidRefreshToken();
     if (isValidToken) {
       this.router.navigate(['/app']);
     }

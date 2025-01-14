@@ -29,8 +29,8 @@ export class AuthService {
       })
       .pipe(
         tap((response) => {
-          const token = response.access_token;
-          this.tokenService.saveToken(token);
+          this.tokenService.saveToken(response.access_token);
+          this.tokenService.saveRefreshToken(response.refresh_token);
         })
       );
   }
@@ -73,6 +73,7 @@ export class AuthService {
 
   logout() {
     this.tokenService.removeToken();
+    this.tokenService.removeRefreshToken();
   }
 
   getProfile() {
@@ -89,5 +90,18 @@ export class AuthService {
 
   getDataUser() {
     return this.user$.getValue();
+  }
+
+  refreshToken(refreshToken: string) {
+    return this.http
+      .post<AuthModel>(`${this.apiUrl}/api/v1/auth/refresh-token`, {
+        refresh_token: refreshToken,
+      })
+      .pipe(
+        tap((response) => {
+          this.tokenService.saveToken(response.access_token);
+          this.tokenService.saveRefreshToken(response.refresh_token);
+        })
+      );
   }
 }

@@ -12,7 +12,6 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'boards',
-        canActivate: [AuthGuard],
         pathMatch: 'full',
       },
       {
