@@ -23,7 +23,7 @@ export class TokenService {
     removeCookie('token');
   }
 
-  isValidaToken(): boolean {
+  isValidToken(): boolean {
     const token = this.getToken();
     if (!token) {
       return false;
